@@ -2,10 +2,10 @@
   "name": "cool-project",
   "version": "1.0.0",
   "description": "",
-  "main": "./exercises/exercise_18/main.js",
+  "main": "./examples_2D/example_5/main.js",
   "scripts": {
-    "start": "budo ./exercises/exercise_18/main.js --open --live --host localhost -- -t es2040",
-    "build": "browserify -t glslify ./exercises/exercise_18/main.js -t es2040 | indexhtmlify > index.html"
+    "start": "budo ./examples_2D/example_5/main.js --open --live --host localhost -- -t es2040",
+    "build": "browserify -t glslify ./examples_2D/example_5/main.js -t es2040 | indexhtmlify > index.html"
   },
   "keywords": [],
   "author": "",

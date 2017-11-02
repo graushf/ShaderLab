@@ -11,22 +11,17 @@ var regl = require('regl')();
 var glsl = require('glslify');
 
 var drawScreenFillQuad = regl({
-  frag: glsl(["#ifdef GL_ES\nprecision mediump float;\n#define GLSLIFY 1\n#endif\n\n#define PI 3.14159265359\n\nuniform vec2 u_resolution;\nuniform float u_time;\nuniform vec2 u_mouse;\n\nfloat plot(vec2 st, float pct) {\n    return smoothstep(pct - 0.02, pct, st.y) - smoothstep(pct, pct+0.02, st.y);\n}\n\nvoid main() {\n    vec2 st = gl_FragCoord.xy/u_resolution;\n\n    // Smooth interpolation between 0.1 and 0.9\n    float x = st.x;\n    float y = mod(x,0.5);\n    //y =  floor(0.5*(sin(x*3.0*PI)));\n\n    vec3 color = vec3(y);\n\n    float pct = plot(st,y);\n    color = (1.0-pct)*vec3(1.0,1.0,1.0)+pct*vec3(1.0,0.0,0.0);\n\n    gl_FragColor = vec4(color, 1.0);\n}\n"]),
+  frag: glsl(["#ifdef GL_ES\nprecision mediump float;\n#define GLSLIFY 1\n#endif\n\n#define PI 3.14159265359\n#define TWOPI 6.28318530718\n\nvoid main(void) {\n    vec3 color1 = vec3(0.886, 0.576, 0.898);\n    vec3 color2 = vec3(0.537, 0.741, 0.408);\n    vec3 pixel;\n\n    // if the x coordinate is greater than 100 then plot color1\n    // else plot color2\n    float widthOfStrip = 100.0;\n    if (gl_FragCoord.x > widthOfStrip) {\n        pixel = color2;\n    } else {\n        pixel = color1;\n    }\n\n    gl_FragColor = vec4(pixel, 1.0);\n}\n"]),
   vert: glsl(["precision highp float;\n#define GLSLIFY 1\nattribute vec2 position;\n\nvoid main() {\n  gl_Position = vec4(position, 0.0, 1.0);\n}\n"]),
   attributes: {
     position: [[-1, 1], [1, 1], [-1, -1], [-1, -1], [1, 1], [1, -1]]
-  },
-  uniforms: {
-    u_resolution: regl.prop('u_resolution')
   },
   count: 6
 });
 
 regl.frame(function (data) {
   regl.clear({ color: [0, 0, 0, 1], depth: true });
-  drawScreenFillQuad({
-    u_resolution: [data.viewportWidth, data.viewportHeight]
-  });
+  drawScreenFillQuad();
 });
 },{"glslify":2,"regl":3}],2:[function(require,module,exports){
 module.exports = function(strings) {
